@@ -1,0 +1,114 @@
+create table Disciplinas
+(codd char(2) not null primary key,
+nomed varchar(20) not null, 
+creditos smallint);
+
+create table Salas
+(numero smallint not null primary key,
+predio varchar(10) not null,
+capacidade smallint not null);
+
+create table Turmas
+(codd char(2) not null,
+turma char(1) not null,
+local smallint,
+primary key (codd, turma),
+foreign key(codd) references Disciplinas,
+foreign key(local) references Salas);
+-- Parte 2:
+insert into salas values (10, 'P1', 40);
+insert into salas values (20, 'P2', 10);
+select * from salas;
+
+-- Parte 3 / Instruções erradas:
+insert into salas values (10, 'P1', 40);
+insert into salas values (30,'PREDIO DE NOME MUITO COMPRIDOS', 10);
+insert into salas values (40,'P3');
+
+-- Parte 3 / Instâncias para disciplica e turma:
+insert into disciplinas values ('d1', 'matematica', 4);
+insert into disciplinas values ('d2', 'portugues', 6);
+insert into turmas values ('d1', 'A', 10);
+insert into turmas values ('d1', 'B', 20);
+insert into turmas values ('d2', 'A', null);
+
+select * from disciplinas;
+select * from turmas;
+
+-- Parte 3 / Instâncias com referências erradas
+insert into turmas values('d3','A',10)
+insert into turmas values ('d1', 'A', 30)
+
+-- Parte 4 / Testando restrições de integridade
+DELETE FROM salas WHERE numero = 10;
+UPDATE salas SET numero = 100 WHERE numero = 10;
+
+-- Parte 5 / Criando compensações para violações de integridade referencial
+create table turmas2
+(codd char(2) not null,
+turma char(1) not null,
+local smallint,
+primary key (codd, turma),
+foreign key(codd) references disciplinas 
+ON DELETE CASCADE,
+foreign key(local) references salas
+ON DELETE SET NULL
+ON UPDATE CASCADE
+);
+
+insert into turmas2 values ('d1', 'A', 10);
+insert into turmas2 values ('d1', 'B', 20);
+insert into turmas2 values ('d2', 'A');
+insert into turmas2 values ('d2', 'B', 20);
+insert into turmas2 values ('d1', 'C', 10);
+
+select * from turmas2
+
+delete from salas where numero=20; 
+--Q5:
+drop table turmas;
+delete from salas where numero=20;
+select * from salas;
+select * from turmas2;
+
+delete from disciplinas where codd='d2'; 
+select * from disciplinas;
+select * from turmas2;
+
+update disciplinas
+set codd='d3' 
+where codd = 'd1';
+select * from disciplinas;
+select * from turmas2;
+
+update salas
+set numero=30 
+where numero = 10;
+select * from salas;
+select * from turmas2;
+
+--Parte 6
+create table turmas3
+(codd char(2) not null,
+turma char(1) not null,
+local smallint);
+
+alter table turmas3
+add constraint t3PK primary key (codd, turma);
+
+alter table turmas3
+add constraint t3salaFK foreign key(local) references salas;
+
+alter table turmas3
+add foreign key(codd) references disciplinas;
+
+alter table turmas3
+add check(turma in ('A','B','U'));
+
+insert into turmas3 values ('d2', 'B', 20);
+insert into turmas3 values ('d1', 'C', 10); --Inválido pois C não está nas salas possiveis
+
+-- Da erro pois exclui a tabela para fazer a parte 5, rodei novamente a criação da turma.
+alter table Turmas
+add check(turma in ('A','B','U'));
+
