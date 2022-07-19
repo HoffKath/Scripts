@@ -1,0 +1,150 @@
+;; dando nomes para 
+;; as variáveis
+org 128
+bms: db 0
+bme: db 0
+tatual: db 0 
+tnovo: db 0
+tratamento: db 0
+nbms: db 0
+nbme: db 0
+estouro: db 0
+diferenca: db 0
+um: db 1
+dois: db 2
+umum: db 255
+lixo: db 0
+zero: db 0 
+;;programa começa no 0
+org 0
+;;zerando o estouro
+lda zero
+sta estouro
+;; copiando 128
+;; e 129 para 133 e 134
+lda bms
+sta nbms
+lda bme
+sta nbme
+;; faz a siferença entre o tatual e o tnovo
+;; e analisa se é negativo ou positivo 
+lda tatual
+sub tnovo
+sta diferenca
+jn neg 
+jp pos
+
+;; se a diferença é negativa, entra em neg
+;; em neg, analisa o sinal 
+;; de 133
+neg:
+lda nbms 
+jn nneg
+jp pneg
+
+;; se o sinal de 133 é negativo e a diferença negativa,
+;; desloca para esquerda um endereço que contém 255, 
+;; fazendo 1 ir para o carry,
+;; depois roda para
+;; a direita o 133, colocando 1 do carry no msb do 133 
+;; e o isb no carry. O 134 roda para direita fazendo o carry
+;; entrar no msb do 134.
+nneg:
+lda umum
+shl
+sta lixo
+lda nbms
+ror
+sta nbms
+lda nbme
+ror
+sta nbme
+;; diminui a diferença
+lda diferenca
+add um
+sta diferenca
+jnz nneg
+jz tratamento1
+
+;; se 133 é positivo e a diferença negativa, 
+;; desloca para a direita o 133, fazendo o isb entrar no carry e esse entrará no msb do 134 através de um ror 
+pneg:
+lda nbms
+shr
+sta nbms
+lda nbme
+ror
+sta nbme
+;; diminuindo a diferênça
+lda diferenca
+add um
+sta diferenca
+jnz pneg
+jz tratamento1 
+ 
+;; o tratamento analisa o endereço 132 
+tratamento1:
+lda tratamento
+jnz arredondamento1
+jz fim
+
+;; se 132 não for zero, faz um arredondamento (soma 1 a 134)
+arredondamento1:
+lda nbme
+add um
+sta nbme
+jmp fim 
+
+;;se a diferença for positiva
+;; abre o pos que desloca 133 e 134
+;; atráves de shl e rol
+pos:
+lda nbme
+shl
+sta nbme
+lda nbms
+rol
+sta nbms
+jmp hestouro
+
+;; hestou analisa se há estouro
+;; (se muda o sinal do 128 quando ele é deslocado)
+hestouro:
+lda bms
+;; analisando o sinal de 128
+jp estouro1
+jn estouro2
+
+estouro1:
+;;analisando o sinal de 133
+lda nbms
+jn estouro3
+jmp adiciona
+
+estouro2:
+;; analisando o sinal de 133
+lda nbms
+jp estouro3
+jmp adiciona
+
+;; escrevendo a partir de 142 pois usa-se de 128 a 141 para variaveis
+org 142 
+;;zerando 135 e colocando 2, pois há estouro
+estouro3:
+lda zero
+sta estouro
+lda estouro
+add dois
+sta estouro
+jmp adiciona
+
+;;diminui a diferença
+adiciona: 
+lda diferenca
+sub um
+sta diferenca
+jnz pos
+jz fim
+
+fim:
+hlt
