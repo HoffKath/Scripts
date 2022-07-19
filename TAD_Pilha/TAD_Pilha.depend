@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1631139776 source:c:\users\kathl\downloads\tad_pilha\pilha.cpp
+	<stdio.h>
+	<stdlib.h>
+	"Pilha.h"
+
+1631137201 c:\users\kathl\downloads\tad_pilha\pilha.h
+	<stdio.h>
+	<stdlib.h>
+
