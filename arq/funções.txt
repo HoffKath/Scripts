@@ -1,0 +1,29 @@
+Para esse trabalho fizemos o programa stackMachineSimu.c e três scripts: 
+    1. operacoesAritmeticas.txt: que testa todas as funções aritmeticas presentes no programa
+    2. operacoesLogica.txt: que testa todas as funções lógicas presentes no programa
+    3. baskara.txt: que faz o calculo das raizes da função 4x^2 + 2x - 6 = 0
+    4. erroPOP.txt: que demonstra o erro retornado ao tentar fazer POP em uma pilha vazia
+    5. erroPUSH.txt: que demonstra o erro retornando ao tentar fazer PUSH em uma pilha cheia
+    6. erroEscrita.txt: que demonstra o erro retornado ao escrever uma instrução de forma errada
+
+As funções que desenvolvemos no programa foram:
+    PUSH (numeroEntrada): insere o número entrado (numeroEntrada) no topo da pilha
+    PUSHR: insere o valor contido em registrador1 no topo da pilha
+    POP: retira o topo da pilha 
+    PEEK: retorna o topo da pilha sem retirá-lo 
+    ADD: soma os dois números do topo da pilha, retirando-os e guardando o resultado na pilha
+    MULT: multiplica os dois números do topo da pilha, retirando-os e guardando o resultado na pilha
+    SQRT: faz a raiz quadrada do topo da pilha, retirando-o e guardando o resultado na pilha
+    KEEP: guarda o topo da pilha no registrador2
+    SUB: subtrai o primeiro número do topo da pilha pelo segundo número do topo, retirando-os e guardando o resultado na pilha
+    DIV: divide o primeiro número do topo da pilha pelo segundo número do topo, retirando-os e guardando o resultado na pilha
+    NOT: faz o not do topo da pilha
+    OR: faz a operação or entre os dois números do topo da pilha
+    AND: faz a operação and entre os dois números do topo da pilha
+    MIRROR: faz a operação mirror com o topo da pilha
+    CLEAR: limpa a pilha
+    PUSHK: coloca no topo da pilha o valor contido no registrador2
+    OUT: imprime a pilha
+
+obs: é válido levantar que todas as funções colocam o resultado no resgistrador1
+
